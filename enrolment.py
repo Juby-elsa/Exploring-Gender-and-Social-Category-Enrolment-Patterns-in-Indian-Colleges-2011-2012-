@@ -15,7 +15,7 @@ print("\nLast 5 Rows:\n",df.tail())
 print("\nMissing Values in Each Column:\n",df.isnull().sum())
 print("\nNumber of Duplicate Rows:",df.duplicated().sum())
 
-#OBJECTIVE 1
+#OBJECTIVE 1--Gender-wise Comparison of Caste Categories
 
 # Grouping SC category data by state and summing male and female values
 sc = df.groupby('State')[['Caste-Category - SC - Male', 'Caste-Category - SC - Female']].sum()
@@ -58,5 +58,40 @@ obc[['Caste-Category - OBC - Male', 'Caste-Category - OBC - Female']].plot(
 plt.title('OBC Category: Male vs Female')
 plt.xlabel('State')
 plt.ylabel('Number of Students')
+plt.tight_layout()
+plt.show()
+
+#Objective 2--Visualizing Minority Group Distribution
+
+# Calculating total male and female counts for each minority group
+muslim_male = df['Out of Total - Muslim - Male'].sum()
+muslim_female = df['Out of Total - Muslim - Female'].sum()
+
+minority_male = df['Out of Total - Other Minority Communities - Male'].sum()
+minority_female = df['Out of Total - Other Minority Communities - Female'].sum()
+
+foreign_male = df['Out of Total - Foreign Students - Male'].sum()
+foreign_female = df['Out of Total - Foreign Students - Female'].sum()
+
+# Creating a figure for the 3 pie charts
+plt.figure(figsize=(12, 6))
+plt.suptitle("Gender-wise Distribution Among Muslim, Minority, and Foreign Students", fontsize=15)
+
+# Pie chart for Muslim students
+plt.subplot(1, 3, 1)
+plt.pie([muslim_male, muslim_female], labels=['Male', 'Female'], autopct='%1.1f%%', colors=['royalblue', 'hotpink'])
+plt.title('Muslim Students')
+
+# Pie chart for Other Minority students
+plt.subplot(1, 3, 2)
+plt.pie([minority_male, minority_female], labels=['Male', 'Female'], autopct='%1.1f%%', colors=['steelblue', 'lightcoral'])
+plt.title('Other Minority Students')
+
+# Pie chart for Foreign students
+plt.subplot(1, 3, 3)
+plt.pie([foreign_male, foreign_female], labels=['Male', 'Female'], autopct='%1.1f%%', colors=['dodgerblue', 'plum'])
+plt.title('Foreign Students')
+
+# Adjusting the  layout to prevent overlapping
 plt.tight_layout()
 plt.show()
