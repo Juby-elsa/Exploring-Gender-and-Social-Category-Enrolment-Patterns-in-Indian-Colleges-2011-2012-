@@ -95,3 +95,33 @@ plt.title('Foreign Students')
 # Adjusting the  layout to prevent overlapping
 plt.tight_layout()
 plt.show()
+
+#Objective 3--Heatmap to Show Correlation Between Categories
+# Grouping data by district and calculate total values for each caste category
+grouped_heatmap = df.groupby('District')[[
+    'Caste-Category - SC - Male', 'Caste-Category - SC - Female',
+    'Caste-Category - ST - Male', 'Caste-Category - ST - Female',
+    'Caste-Category - OBC - Male', 'Caste-Category - OBC - Female',
+    'Caste-Category - Total - Male', 'Caste-Category - Total - Female'
+]].sum()
+
+# Calculating percentage distribution within each gender group
+grouped_heatmap['SC Male %'] = grouped_heatmap['Caste-Category - SC - Male'] / grouped_heatmap['Caste-Category - Total - Male']
+grouped_heatmap['SC Female %'] = grouped_heatmap['Caste-Category - SC - Female'] / grouped_heatmap['Caste-Category - Total - Female']
+grouped_heatmap['ST Male %'] = grouped_heatmap['Caste-Category - ST - Male'] / grouped_heatmap['Caste-Category - Total - Male']
+grouped_heatmap['ST Female %'] = grouped_heatmap['Caste-Category - ST - Female'] / grouped_heatmap['Caste-Category - Total - Female']
+grouped_heatmap['OBC Male %'] = grouped_heatmap['Caste-Category - OBC - Male'] / grouped_heatmap['Caste-Category - Total - Male']
+grouped_heatmap['OBC Female %'] = grouped_heatmap['Caste-Category - OBC - Female'] / grouped_heatmap['Caste-Category - Total - Female']
+
+# Selecting only percentage columns for correlation
+percentage_data = grouped_heatmap[[col for col in grouped_heatmap.columns if '%' in col]]
+
+# Computing the correlation matrix
+corr = percentage_data.corr()
+
+# Plotting the correlation heatmap
+plt.figure(figsize=(10, 7))
+sns.heatmap(corr, annot=True, cmap="Blues", linewidths=0.5)
+plt.title('Correlation Between Caste Categories (Normalized by Gender)')
+plt.tight_layout()
+plt.show()
