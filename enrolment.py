@@ -209,3 +209,27 @@ plt.title('States by Total Student Population')
 plt.xticks(rotation=90)
 plt.tight_layout()
 plt.show()
+
+#Objective 6-Comparing PWD (Persons with Disabilities) Numbers Across Districts
+
+# Removeing "All Districts" 
+df_pwd = df[df['State'] != 'All Districts'].copy()
+
+# Calculating total PWD students
+df_pwd["Total_PWD"] = df_pwd["Out of Total - PWD - Male"] + df_pwd["Out of Total - PWD - Female"]
+
+# Selecting top 10 districts with highest total PWD students
+top_df = df_pwd.sort_values('Total_PWD', ascending=False).head(10)
+
+# Plotting
+plt.figure(figsize=(10, 6))
+plt.plot(top_df["District"], top_df["Out of Total - PWD - Male"], marker='o', label='Male', color='blue')
+plt.plot(top_df["District"], top_df["Out of Total - PWD - Female"], marker='o', label='Female', color='orange')
+
+plt.title("PWD Student Numbers in Top 10 Districts")
+plt.xlabel("District")
+plt.ylabel("Number of Students")
+plt.xticks(rotation=30)
+plt.legend()
+plt.tight_layout()
+plt.show()
