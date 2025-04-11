@@ -190,3 +190,22 @@ plt.suptitle('Distribution of Extreme Outliers in SC, ST, and Muslim Student Pop
 
 plt.tight_layout()
 plt.show()
+
+#Objective 5-State-wise Total Population Visualization
+
+df_total = df[df['State'] != 'All Districts']
+
+#Grouping by State and calculate total male + female
+grouped_total = df_total.groupby('State')[['Caste-Category - Total - Male', 'Caste-Category - Total - Female']].sum()
+grouped_total['Total'] = grouped_total['Caste-Category - Total - Male'] + grouped_total['Caste-Category - Total - Female']
+
+#Plotting the bar chart
+plt.figure(figsize=(12, 6))
+plt.bar(grouped_total.index, grouped_total['Total'], color='darkcyan')
+
+plt.xlabel('State')
+plt.ylabel('Total Students')
+plt.title('States by Total Student Population')
+plt.xticks(rotation=90)
+plt.tight_layout()
+plt.show()
