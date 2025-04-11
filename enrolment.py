@@ -125,3 +125,68 @@ sns.heatmap(corr, annot=True, cmap="Blues", linewidths=0.5)
 plt.title('Correlation Between Caste Categories (Normalized by Gender)')
 plt.tight_layout()
 plt.show()
+
+#Objective 4--Finding Outliers in Caste and Minority Data
+
+# Filtering out the "All Districts" row
+data = df[df["District"] != "All Districts"]
+
+# Defining the relevant columns
+columns = [
+    'Caste-Category - SC - Male',
+    'Caste-Category - SC - Female',
+    'Caste-Category - ST - Male',
+    'Caste-Category - ST - Female',
+    'Out of Total - Muslim - Male',
+    'Out of Total - Muslim - Female'
+]
+
+# Collecting extreme outliers
+top_outlier_districts = pd.DataFrame()
+
+for col in columns:
+    Q1 = np.percentile(data[col], 25)
+    Q3 = np.percentile(data[col], 75)
+    IQR = Q3 - Q1
+    upper_bound = Q3 + 1.5 * IQR
+
+    # Filtering only strong upper outliers
+    outliers = data[data[col] > upper_bound]
+
+    # Taking the top 10 most extreme values
+    top10 = outliers.sort_values(by=col, ascending=False).head(10)
+    top_outlier_districts = pd.concat([top_outlier_districts, top10])
+
+# Plotting histograms
+plt.figure(figsize=(12, 8))
+
+
+plt.subplot(2, 3, 1)
+plt.hist(top_outlier_districts['Caste-Category - SC - Male'], color='lightseagreen', edgecolor='black', bins=10)
+plt.title('SC Male')
+
+plt.subplot(2, 3, 2)
+plt.hist(top_outlier_districts['Caste-Category - SC - Female'], color='lightseagreen', edgecolor='black', bins=10)
+plt.title('SC Female')
+
+plt.subplot(2, 3, 3)
+plt.hist(top_outlier_districts['Caste-Category - ST - Male'], color='lightseagreen', edgecolor='black', bins=10)
+plt.title('ST Male')
+
+plt.subplot(2, 3, 4)
+plt.hist(top_outlier_districts['Caste-Category - ST - Female'], color='lightseagreen', edgecolor='black', bins=10)
+plt.title('ST Female')
+
+plt.subplot(2, 3, 5)
+plt.hist(top_outlier_districts['Out of Total - Muslim - Male'], color='lightseagreen', edgecolor='black', bins=10)
+plt.title('Muslim Male')
+
+plt.subplot(2, 3, 6)
+plt.hist(top_outlier_districts['Out of Total - Muslim - Female'], color='lightseagreen', edgecolor='black', bins=10)
+plt.title('Muslim Female')
+
+# Adding the overall title
+plt.suptitle('Distribution of Extreme Outliers in SC, ST, and Muslim Student Populations', fontsize=16)
+
+plt.tight_layout()
+plt.show()
